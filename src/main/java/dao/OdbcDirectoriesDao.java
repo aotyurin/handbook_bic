@@ -14,7 +14,7 @@ public class OdbcDirectoriesDao {
     private JdbcTemplate jdbcTemplate;
 
     public OdbcDirectoriesDao() {
-        this.jdbcTemplate = JdbcTemplate.getInstance();
+        this.jdbcTemplate = new JdbcTemplateOdbc();
     }
 
     public List<BnkSeek> getBnkSeek() throws SQLException {

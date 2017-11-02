@@ -1,26 +1,57 @@
 package main.java.service;
 
+import main.java.dao.BnkSeekDao;
+import main.java.dao.ElectParticipantDao;
+import main.java.dao.InitBdDao;
 import main.java.dao.OdbcDirectoriesDao;
-import main.java.model.*;
+import main.java.dao.ParticipantSettlementDao;
+import main.java.dao.RegionDao;
+import main.java.dao.TypeLocalityDao;
+import main.java.model.BnkSeek;
+import main.java.model.ElectParticipant;
+import main.java.model.ParticipantSettlement;
+import main.java.model.Region;
+import main.java.model.TypeLocality;
 
 import java.sql.SQLException;
 import java.util.List;
 
+
 public class OverloadDataService {
-    OdbcDirectoriesDao odbcDirectoriesDao = new OdbcDirectoriesDao();
+    private OdbcDirectoriesDao odbcDirectoriesDao;
+    private BnkSeekDao bnkSeekDao;
+    private TypeLocalityDao typeLocalityDao;
+    private ParticipantSettlementDao participantSettlementDao;
+    private ElectParticipantDao electParticipantDao;
+    private RegionDao regionDao;
+
+
+    public OverloadDataService() {
+        this.odbcDirectoriesDao = new OdbcDirectoriesDao();
+        this.bnkSeekDao = new BnkSeekDao();
+        this.typeLocalityDao = new TypeLocalityDao();
+        this.participantSettlementDao = new ParticipantSettlementDao();
+        this.electParticipantDao = new ElectParticipantDao();
+        this.regionDao = new RegionDao();
+    }
+
 
     public void overloadDataFromDbf() throws SQLException {
-        List<BnkSeek> bnkSeekList = odbcDirectoriesDao.getBnkSeek();
-        System.out.println(bnkSeekList.size());
-
+        List<TypeLocality> typeLocalityList = odbcDirectoriesDao.getTypeLocality();
+        typeLocalityDao.overload(typeLocalityList);
 
         List<ParticipantSettlement> participantSettlementList = odbcDirectoriesDao.getParticipantSettlements();
-        System.out.println(participantSettlementList.size());
+        participantSettlementDao.overload(participantSettlementList);
+
         List<ElectParticipant> electParticipantList = odbcDirectoriesDao.getElectParticipants();
-        System.out.println(electParticipantList.size());
+        electParticipantDao.overload(electParticipantList);
+
         List<Region> regionList = odbcDirectoriesDao.getRegions();
-        System.out.println(regionList.size());
-        List<TypeLocality> typeLocalityList = odbcDirectoriesDao.getTypeLocality();
-        System.out.println(typeLocalityList.size());
+        regionDao.overload(regionList);
+
+        List<BnkSeek> bnkSeekList = odbcDirectoriesDao.getBnkSeek();
+        bnkSeekDao.overload(bnkSeekList);
     }
+
+
 }

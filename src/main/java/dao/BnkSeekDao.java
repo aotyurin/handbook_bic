@@ -124,4 +124,10 @@ public class BnkSeekDao {
     }
 
 
+    public void deleteById(String newnum) {
+        String sqlDel__Bnk_Seek = "DELETE FROM Bnk_Seek WHERE newnum=:newnum;";
+        PreparedParamsSetter pps = new PreparedParamsSetter();
+        pps.setValues("newnum", newnum);
+        jdbcTemplate.executeUpdate(sqlDel__Bnk_Seek, pps);
+    }
 }

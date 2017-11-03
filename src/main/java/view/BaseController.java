@@ -4,10 +4,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.java.dto.BnkSeekDto;
 import main.java.service.BnkSeekService;
@@ -18,6 +21,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BaseController {
+    private BnkSeekService bnkSeekService = new BnkSeekService();
+    private OverloadDataService overloadDataService = new OverloadDataService();
+
     //region Table
     @FXML
     private TableView<BnkSeekDto> bnkSeekTable;
@@ -64,13 +70,43 @@ public class BaseController {
 
     //region Button
     @FXML
-    private void overloadDataFromDbf() throws SQLException {
-        OverloadDataService overloadDataService = new OverloadDataService();
-        overloadDataService.overloadDataFromDbf();
+    private void btnOverloadDataFromDbf() throws SQLException {
+        Dialogs.DialogResponse dialogResponse = Dialogs.showConfirmDialog(new Stage(), "Вы действительно хотите загрузить данные? \n" +
+                "Ранее загруженные данные будут удалены.", "", "Внимание!", Dialogs.DialogOptions.YES_NO);
+        if (dialogResponse == Dialogs.DialogResponse.YES) {
+            overloadDataService.overloadDataFromDbf();
 
-        initialize();
+            initialize();
+        }
     }
 
+    @FXML
+    private void btnEditBnkSeek(ActionEvent event) {
+        // edit
+    }
+
+    @FXML
+    private void btnAddBnkSeek() {
+        // add
+    }
+
+    @FXML
+    private void btnDeleteBnkSeek() {
+        int selectedIndex = bnkSeekTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Dialogs.DialogResponse dialogResponse = Dialogs.showConfirmDialog(new Stage(), "Вы действительно хотите удалить запись?", "",
+                    "Внимание!", Dialogs.DialogOptions.YES_NO);
+            if (dialogResponse == Dialogs.DialogResponse.YES) {
+                BnkSeekDto selectedItem = bnkSeekTable.getSelectionModel().getSelectedItem();
+                bnkSeekTable.getItems().remove(selectedIndex);
+                bnkSeekTable.getSelectionModel().clearSelection();
+
+                bnkSeekService.deleteById(selectedItem.newnumProperty().get());
+            }
+        } else {
+            Dialogs.showWarningDialog(new Stage(), "Не выделено ни одной записи!", "Удаление не возможно", "Внимание!");
+        }
+    }
     //endregion
 
     @FXML

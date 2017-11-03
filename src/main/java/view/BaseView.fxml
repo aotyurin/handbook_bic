@@ -42,10 +42,10 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="bnkSeekTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Наименование участника расчетов" />
-                            <TableColumn prefWidth="75.0" text="БИК" />
+                            <TableColumn fx:id="namepColumn" prefWidth="75.0" text="Наименование участника расчетов" />
+                            <TableColumn fx:id="newnumColumn" prefWidth="75.0" text="БИК" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -95,22 +95,22 @@
                               <Label text="Номер счета" GridPane.rowIndex="13" />
                               <Label text="Дата включения информации об участнике расчетов в ЭБД" wrapText="true" GridPane.rowIndex="14" />
                               <Label text="Дата контроля" GridPane.rowIndex="15" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                              <Label fx:id="realLabel" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="pznNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="uerNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="rgnNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="indLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="tnpNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label fx:id="nnpLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label fx:id="adrLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label fx:id="rkcLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="telefonLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                              <Label fx:id="regnLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <Label fx:id="okpoLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                              <Label fx:id="dt_izmLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                              <Label fx:id="ksnpLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                              <Label fx:id="date_inLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                              <Label fx:id="date_chLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="15" />
                            </children>
                         </GridPane>
                         <HBox alignment="BOTTOM_RIGHT" layoutX="20.0" layoutY="333.0" prefHeight="44.0" prefWidth="407.0" spacing="8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="389.0">

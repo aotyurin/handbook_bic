@@ -2,7 +2,6 @@ package main.java.service;
 
 import main.java.dao.BnkSeekDao;
 import main.java.dao.ElectParticipantDao;
-import main.java.dao.InitBdDao;
 import main.java.dao.OdbcDirectoriesDao;
 import main.java.dao.ParticipantSettlementDao;
 import main.java.dao.RegionDao;

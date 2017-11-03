@@ -1,16 +1,16 @@
 package main.java.model;
 
 public class TypeLocality {
-    private String rgn;
+    private String tnp;
     private String name;
 
-    public TypeLocality(String rgn, String name) {
-        this.rgn = rgn;
+    public TypeLocality(String tnp, String name) {
+        this.tnp = tnp;
         this.name = name;
     }
 
-    public String getRgn() {
-        return rgn;
+    public String getTnp() {
+        return tnp;
     }
 
     public String getName() {

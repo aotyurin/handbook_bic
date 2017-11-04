@@ -27,7 +27,6 @@ public class BnkSeekService {
         }
 
         return bnkSeekDtoList;
-
     }
 
     public void deleteById(String newnum) {
@@ -35,9 +34,10 @@ public class BnkSeekService {
     }
 
     public void edit(BnkSeekDto bnkSeekDto) {
-        bnkSeekDao.insert(new BnkSeek(bnkSeekDto.getReal(), bnkSeekDto.getPznName(), bnkSeekDto.getUerName(), bnkSeekDto.getRgnName(),
+        bnkSeekDao.insert(new BnkSeekName(bnkSeekDto.getReal(), bnkSeekDto.getPznName(), bnkSeekDto.getUerName(), bnkSeekDto.getRgnName(),
                 bnkSeekDto.getInd(), bnkSeekDto.getTnpName(), bnkSeekDto.getNnp(), bnkSeekDto.getAdr(), bnkSeekDto.getRkc(),
                 bnkSeekDto.namepProperty().get(), bnkSeekDto.newnumProperty().get(), bnkSeekDto.getTelefon(), bnkSeekDto.getRegn(), bnkSeekDto.getOkpo(),
-                bnkSeekDto.getDt_izm(), bnkSeekDto.getKsnp(), bnkSeekDto.getDate_in(), bnkSeekDto.getDate_ch()));
+                bnkSeekDto.getDt_izm(), bnkSeekDto.getKsnp(), bnkSeekDto.getDate_in(), bnkSeekDto.getDate_ch(),
+                bnkSeekDto.getPznName(), bnkSeekDto.getUerName(), bnkSeekDto.getRgnName(), bnkSeekDto.getTnpName()));
     }
 }

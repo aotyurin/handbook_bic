@@ -5,6 +5,10 @@ import main.java.bd.preparedParams.PreparedParamsSetter;
 import main.java.bd.register.JdbcTemplateSqlite;
 import main.java.model.Region;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RegionDao {
@@ -27,4 +31,24 @@ public class RegionDao {
             jdbcTemplate.executeUpdate(sqlInsert__Region, pps);
         }
     }
+
+    public List<Region> getRegionList() {
+        String sql = "SELECT rgn, name FROM Region;";
+
+        List<Region> regionList = new ArrayList<>();
+        ResultSet resultSet = jdbcTemplate.executeQuery(sql);
+        try {
+            while (resultSet.next()) {
+                String rgn = resultSet.getString("rgn");
+                String name = resultSet.getString("name");
+
+                regionList.add(new Region(rgn, name));
+            }
+
+            return regionList;
+        } catch (SQLException e) {
+            return Collections.emptyList();
+        }
+    }
+
 }

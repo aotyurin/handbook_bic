@@ -3,8 +3,13 @@ package main.java.dao;
 import main.java.bd.JdbcTemplate;
 import main.java.bd.preparedParams.PreparedParamsSetter;
 import main.java.bd.register.JdbcTemplateSqlite;
+import main.java.dto.ElectParticipantDto;
 import main.java.model.ElectParticipant;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ElectParticipantDao {
@@ -28,4 +33,24 @@ public class ElectParticipantDao {
         }
 
     }
+
+    public List<ElectParticipant> getElectParticipantList() {
+        String sql = "SELECT uer, name FROM Elect_Participant;";
+
+        List<ElectParticipant> electParticipantList = new ArrayList<>();
+        ResultSet resultSet = jdbcTemplate.executeQuery(sql);
+        try {
+            while (resultSet.next()) {
+                String uer = resultSet.getString("uer");
+                String name = resultSet.getString("name");
+
+                electParticipantList.add(new ElectParticipant(uer, name));
+            }
+
+            return electParticipantList;
+        } catch (SQLException e) {
+            return Collections.emptyList();
+        }
+    }
+
 }

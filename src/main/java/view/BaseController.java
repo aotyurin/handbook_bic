@@ -3,32 +3,40 @@ package main.java.view;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Dialogs;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.java.Main;
 import main.java.dto.BnkSeekDto;
+import main.java.dto.ParticipantSettlementDto;
+import main.java.dto.RegionDto;
 import main.java.service.BnkSeekService;
 import main.java.service.OverloadDataService;
+import main.java.service.ParticipantSettlementService;
+import main.java.service.RegionService;
 import main.java.util.DateUtil;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseController {
-    private BnkSeekService bnkSeekService;
     private OverloadDataService overloadDataService;
+    private BnkSeekService bnkSeekService;
+    private RegionService regionService;
+    private ParticipantSettlementService participantSettlementService;
+
+    private ObservableList<BnkSeekDto> masterData = FXCollections.observableArrayList();
+    private ObservableList<BnkSeekDto> filteredData = FXCollections.observableArrayList();
 
     //region Table
     @FXML
@@ -74,11 +82,21 @@ public class BaseController {
     private Label date_chLabel;
     //endregion
 
+    //region FilterField
+    @FXML
+    private TextField bicFilterField;
+    @FXML
+    private ComboBox<String> rgnNameFilterComboBox;
+    @FXML
+    private ComboBox<String> pznNameFilterComboBox;
+    //endregion
 
     //region ctr
     public BaseController() {
-        this.bnkSeekService = new BnkSeekService();
         this.overloadDataService = new OverloadDataService();
+        this.bnkSeekService = new BnkSeekService();
+        this.regionService = new RegionService();
+        this.participantSettlementService = new ParticipantSettlementService();
     }
     //endregion
 
@@ -122,7 +140,7 @@ public class BaseController {
                 bnkSeekTable.getItems().remove(selectedIndex);
                 bnkSeekTable.getSelectionModel().clearSelection();
 
-                bnkSeekService.deleteById(selectedItem.newnumProperty().get());
+                this.bnkSeekService.deleteById(selectedItem.newnumProperty().get());
             }
         } else {
             Dialogs.showWarningDialog(new Stage(), "Не выделено ни одной записи!", "Удаление не возможно", "Внимание!");
@@ -131,8 +149,20 @@ public class BaseController {
     //endregion
 
     @FXML
+    private void rgnNameFilterComboBoxOnChange(ActionEvent event) {
+        updateFilteredData();
+    }
+
+    @FXML
+    private void pznNameFilterComboBoxOnChange(ActionEvent event) {
+        updateFilteredData();
+    }
+
+    @FXML
     private void initialize() {
         System.out.println("initialize baseView");
+
+        initData();
 
         fillTable();
 
@@ -140,20 +170,27 @@ public class BaseController {
 
         fillLabel(null);
 
-        // add listen for selection changes in table
-        this.bnkSeekTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BnkSeekDto>() {
-            @Override
-            public void changed(ObservableValue<? extends BnkSeekDto> observableValue, BnkSeekDto bnkSeekDto, BnkSeekDto t1) {
-                fillLabel(t1);
-            }
-        });
+        addListener();
+    }
+
+    private void initData() {
+        List<BnkSeekDto> bnkSeekDtoList = this.bnkSeekService.getBnkSeekList();
+        masterData.addAll(bnkSeekDtoList);
+        filteredData.addAll(masterData);
+
+        List<RegionDto> regionList = this.regionService.getRegionList();
+        for (RegionDto regionDto : regionList) {
+            this.rgnNameFilterComboBox.getItems().add(regionDto.getName());
+        }
+
+        List<ParticipantSettlementDto> settlementDtoList = this.participantSettlementService.getParticipantSettlementList();
+        for (ParticipantSettlementDto settlementDto : settlementDtoList) {
+            this.pznNameFilterComboBox.getItems().add(settlementDto.getName());
+        }
     }
 
     private void fillTable() {
-        ObservableList<BnkSeekDto> bnkSeekData = FXCollections.observableArrayList();
-        List<BnkSeekDto> bnkSeekDtoList = bnkSeekService.getBnkSeekList();
-        bnkSeekData.addAll(bnkSeekDtoList);
-        this.bnkSeekTable.setItems(bnkSeekData);
+        this.bnkSeekTable.setItems(masterData);
     }
 
     private void fillTableColumn() {
@@ -210,11 +247,69 @@ public class BaseController {
         }
     }
 
+    private void addListener() {
+        this.bnkSeekTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BnkSeekDto>() {
+            @Override
+            public void changed(ObservableValue<? extends BnkSeekDto> observableValue, BnkSeekDto bnkSeekDto, BnkSeekDto t1) {
+                fillLabel(t1);
+            }
+        });
+
+        this.masterData.addListener(new ListChangeListener<BnkSeekDto>() {
+            @Override
+            public void onChanged(Change<? extends BnkSeekDto> change) {
+                updateFilteredData();
+            }
+        });
+
+        this.bicFilterField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                updateFilteredData();
+            }
+        });
+    }
+
+
+    private void updateFilteredData() {
+        filteredData.clear();
+
+        ArrayList<BnkSeekDto> dtoTmpList = new ArrayList<>();
+        dtoTmpList.addAll(masterData);
+
+        String bicItem = this.bicFilterField.getText();
+        String rgnNameItem = this.rgnNameFilterComboBox.getSelectionModel().getSelectedItem();
+        String pznNameItem = this.pznNameFilterComboBox.getSelectionModel().getSelectedItem();
+
+        if ((bicItem != null || !bicItem.isEmpty()) || rgnNameItem != null || pznNameItem != null) {
+            for (int i = dtoTmpList.size() - 1; i >= 0; i--) {
+                if (!dtoTmpList.get(i).newnumProperty().get().toLowerCase().contains(bicItem.toLowerCase())) {
+                    dtoTmpList.remove(i);
+                }
+            }
+            for (int i = dtoTmpList.size() - 1; i >= 0; i--) {
+                if (rgnNameItem != null && dtoTmpList.get(i).getRgnName() != null && !dtoTmpList.get(i).getRgnName().contains(rgnNameItem)) {
+                    dtoTmpList.remove(i);
+                }
+            }
+            for (int i = dtoTmpList.size() - 1; i >= 0; i--) {
+                if (pznNameItem != null && dtoTmpList.get(i).getPznName() != null && !dtoTmpList.get(i).getPznName().contains(pznNameItem)) {
+                    dtoTmpList.remove(i);
+                }
+            }
+        }
+
+        filteredData.addAll(dtoTmpList);
+        this.bnkSeekTable.setItems(filteredData);
+    }
+
     private void handleDialogModule(BnkSeekDto selectedItem) {
         BnkSeekDto tmpBnkSeekDto = showEditDialog(selectedItem);
         if (tmpBnkSeekDto != null) {
-            bnkSeekTable.getSelectionModel().select(tmpBnkSeekDto);
-            bnkSeekService.edit(tmpBnkSeekDto);
+            this.bnkSeekTable.getSelectionModel().select(tmpBnkSeekDto);
+            this.bnkSeekService.edit(tmpBnkSeekDto);
+
+            initialize();
         }
     }
 
@@ -230,12 +325,12 @@ public class BaseController {
             modalStage.setScene(scene);
 
             EditDialogController editDialogController = (EditDialogController) fxmlLoader.getController();
-            editDialogController.setBnkSeek(selectedItem);
+            editDialogController.initCtrl(selectedItem);
             editDialogController.setDialogStage(modalStage);
 
             modalStage.showAndWait();
 
-            return editDialogController.getBnkSeek();
+            return editDialogController.getResult();
         } catch (IOException e) {
             e.printStackTrace();
         }

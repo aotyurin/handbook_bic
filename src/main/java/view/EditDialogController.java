@@ -1,13 +1,29 @@
 package main.java.view;
 
+import com.sun.org.apache.xml.internal.security.Init;
 import javafx.fxml.FXML;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.java.dto.BnkSeekDto;
+import main.java.service.BnkSeekService;
 import main.java.util.DateUtil;
+
+import java.text.ParseException;
+import java.util.List;
 
 
 public class EditDialogController {
+    private BnkSeekService bnkSeekService;
+
+
+    private Stage dialogStage;
+    private BnkSeekDto bnkSeek;
+
+    @FXML
+    private TextField namepField;
+    @FXML
+    private TextField newnumField;
     @FXML
     public TextField realField;
     @FXML
@@ -41,38 +57,97 @@ public class EditDialogController {
     @FXML
     public TextField date_chField;
 
-    private Stage dialogStage;
 
-    @FXML
-    private void initialize() {
+    public EditDialogController() {
+        this.bnkSeekService = new BnkSeekService();
     }
+
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
 
+    public void setBnkSeek(BnkSeekDto bnkSeekDto) {
+        this.bnkSeek = bnkSeekDto;
+        fillField(this.bnkSeek);
+    }
+
+    public BnkSeekDto getBnkSeek() {
+        return this.bnkSeek;
+    }
+
+
+    @FXML
+    private void initialize() {
+    }
+
     @FXML
     private void btnOk() {
         if (isInputValid()) {
-
-            //
-//            save
             dialogStage.close();
         }
     }
 
     @FXML
     private void btnCancel() {
+        this.bnkSeek = null;
         dialogStage.close();
     }
 
 
     private boolean isInputValid() {
-        return true;
+        StringBuilder msg = new StringBuilder();
+
+        if (this.newnumField.getText() == null || this.newnumField.getText().length() == 0) {
+            msg.append("Обязательное поле 'БИК' не заполнено! \n");
+        } else {
+            try {
+                Integer.parseInt(this.newnumField.getText());
+
+                List<BnkSeekDto> bnkSeekList = bnkSeekService.getBnkSeekList();
+                for (BnkSeekDto bnkSeekDto : bnkSeekList) {
+                    if ((this.bnkSeek == null & this.newnumField.getText().equals(bnkSeekDto.newnumProperty().get()) ||
+                            (this.bnkSeek != null & this.newnumField.getText().equals(bnkSeekDto.newnumProperty().get()) & !this.namepField.getText().equals(bnkSeekDto.namepProperty().get())))) {
+                        msg.append("БИК " + this.newnumField.getText() + " уже присвоен другому участнику расчетов! \n");
+                    }
+                }
+            } catch (NumberFormatException ignore) {
+                msg.append("В поле 'БИК' значение не является числом! \n");
+            }
+        }
+        try {
+            if (DateUtil.parse(this.dt_izmField.getText()) == null) {
+                msg.append("Обязательное поле 'Дата последнего изменения записи' не заполнено! \n");
+            }
+        } catch (ParseException ignore) {
+            msg.append("В поле 'Дата последнего изменения записи' значение не является датой. Формат: " + DateUtil.getFormat() + "! \n");
+        }
+        try {
+            if (DateUtil.parse(this.date_inField.getText()) == null) {
+                msg.append("Обязательное поле 'Дата включения информации об участнике расчетов в ЭБД' не заполнено! \n");
+            }
+        } catch (ParseException ignore) {
+            msg.append("В поле 'Дата включения информации об участнике расчетов в ЭБД' значение не является датой. Формат: " + DateUtil.getFormat() + "! \n");
+        }
+        try {
+            DateUtil.parse(this.date_chField.getText());
+        } catch (ParseException ignore) {
+            msg.append("В поле 'Дата контроля' значение не является датой. Формат: " + DateUtil.getFormat() + "! \n");
+        }
+
+        if (msg.length() == 0) {
+            return true;
+        } else {
+            Dialogs.showErrorDialog(new Stage(), msg.toString(), "Ошибки валидации", "Внимание!");
+
+            return false;
+        }
     }
 
-    public void setBnkSeek(BnkSeekDto bnkSeekDto) {
-        if (bnkSeekDto!=null) {
+    private void fillField(BnkSeekDto bnkSeekDto) {
+        if (bnkSeekDto != null) {
+            this.namepField.setText(bnkSeekDto.namepProperty().get());
+            this.newnumField.setText(bnkSeekDto.newnumProperty().get());
             this.realField.setText(bnkSeekDto.getReal());
             this.pznNameField.setText(bnkSeekDto.getPznName());
             this.uerNameField.setText(bnkSeekDto.getUerName());
@@ -90,6 +165,8 @@ public class EditDialogController {
             this.date_inField.setText(DateUtil.format(bnkSeekDto.getDate_in()));
             this.date_chField.setText(DateUtil.format(bnkSeekDto.getDate_ch()));
         } else {
+            this.namepField.setText("");
+            this.newnumField.setText("");
             this.realField.setText("");
             this.pznNameField.setText("");
             this.uerNameField.setText("");
@@ -107,8 +184,6 @@ public class EditDialogController {
             this.date_inField.setText("");
             this.date_chField.setText("");
         }
-
     }
-
 
 }

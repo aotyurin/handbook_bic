@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<AnchorPane prefHeight="460.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.view.EditDialogController">
+   <children>
+      <GridPane prefHeight="364.0" prefWidth="380.0" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+          <children>
+              <Label text="Контроль допустимости проведения расчетных операций" wrapText="true" />
+              <Label text="Тип участника расчетов" GridPane.rowIndex="1" />
+              <Label text="Тип участника системы электронных расчетов" wrapText="true" GridPane.rowIndex="2" />
+              <Label text="Территория РФ" GridPane.rowIndex="3" />
+              <Label text="Индекс" GridPane.rowIndex="4" />
+              <Label text="Тип населенного пункта" GridPane.rowIndex="5" />
+              <Label text="Населенный пункт" GridPane.rowIndex="6" />
+              <Label text="Адрес" GridPane.rowIndex="7" />
+              <Label text="БИК РКЦ (ГРКЦ)" GridPane.rowIndex="8" />
+              <Label text="Телефон" GridPane.rowIndex="9" />
+              <Label text="Регистрационный номер" GridPane.rowIndex="10" />
+              <Label text="Код ОКПО" GridPane.rowIndex="11" />
+              <Label text="Дата последнего изменения записи" GridPane.rowIndex="12" />
+              <Label text="Номер счета" GridPane.rowIndex="13" />
+              <Label text="Дата включения информации об участнике расчетов в ЭБД" wrapText="true" GridPane.rowIndex="14" />
+              <Label text="Дата контроля" GridPane.rowIndex="15" />
+              <TextField fx:id="realField" GridPane.columnIndex="1" />
+              <TextField fx:id="pznNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+              <TextField fx:id="uerNameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+              <TextField fx:id="rgnNameField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+              <TextField fx:id="indField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+              <TextField fx:id="tnpNameField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+              <TextField fx:id="nnpField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+              <TextField fx:id="adrField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+              <TextField fx:id="rkcField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+              <TextField fx:id="telefonField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+              <TextField fx:id="regnField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+              <TextField fx:id="okpoField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+              <TextField fx:id="dt_izmField" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+              <TextField fx:id="ksnpField" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+              <TextField fx:id="date_inField" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+              <TextField fx:id="date_chField" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+          </children>
+      </GridPane>
+      <HBox layoutX="87.0" layoutY="412.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+             <Button defaultButton="true" mnemonicParsing="false" onAction="#btnOk" prefWidth="110.0" text="OK" />
+             <Button mnemonicParsing="false" onAction="#btnCancel" prefWidth="110.0" text="Cancel" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

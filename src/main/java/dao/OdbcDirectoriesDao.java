@@ -75,10 +75,10 @@ public class OdbcDirectoriesDao {
 
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
-            String pzn = resultSet.getString("UER");
+            String uer = resultSet.getString("UER");
             String name = resultSet.getString("UERNAME");
 
-            electParticipantList.add(new ElectParticipant(pzn, name));
+            electParticipantList.add(new ElectParticipant(uer, name));
         }
 
         return electParticipantList;
@@ -109,10 +109,10 @@ public class OdbcDirectoriesDao {
 
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
-            String rgn = resultSet.getString("TNP");
+            String tnp = resultSet.getString("TNP");
             String name = resultSet.getString("FULLNAME");
 
-            localityList.add(new TypeLocality(rgn, name));
+            localityList.add(new TypeLocality(tnp, name));
         }
 
         return localityList;

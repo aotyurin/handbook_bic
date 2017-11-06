@@ -1,16 +1,16 @@
 package main.java.model;
 
 public class ElectParticipant {
-    private String pzn;
+    private String uer;
     private String name;
 
-    public ElectParticipant(String pzn, String name) {
-        this.pzn = pzn;
+    public ElectParticipant(String uer, String name) {
+        this.uer = uer;
         this.name = name;
     }
 
-    public String getPzn() {
-        return pzn;
+    public String getUer() {
+        return uer;
     }
 
     public String getName() {

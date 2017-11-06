@@ -1,6 +1,6 @@
 package main.java.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BnkSeek {
     private String real;

@@ -6,15 +6,10 @@ public class PreparedParams {
 
     PreparedParams(String name, Object value) {
         this.name = name;
-
-        if (value == null) {
-            this.value = "''";
+        if (value instanceof String) {
+            this.value = "'" + value + "'";
         } else {
-            if (value instanceof String) {
-                this.value = "'" + value + "'";
-            } else {
-                this.value = value.toString();
-            }
+            this.value = value.toString();
         }
     }
 

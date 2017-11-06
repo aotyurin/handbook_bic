@@ -28,4 +28,8 @@ public class BnkSeekService {
         return bnkSeekDtoList;
 
     }
+
+    public void deleteById(String newnum) {
+        bnkSeekDao.deleteById(newnum);
+    }
 }

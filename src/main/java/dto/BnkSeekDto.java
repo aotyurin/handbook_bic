@@ -28,11 +28,6 @@ public class BnkSeekDto {
     private ObjectProperty<Date> date_ch;
 
 
-    public BnkSeekDto() {
-//        this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-        this("a", "b", "c", "d", "e", null, null, null, null, "namep", "newnum", null, null, null, null, null, null, null);
-    }
-
     public BnkSeekDto(String real, String pznName, String uerName, String rgnName, String ind, String tnpName,
                       String nnp, String adr, String rkc, String namep, String newnum, String telefon,
                       String regn, String okpo, Date dt_izm, String ksnp, Date date_in, Date date_ch) {
@@ -117,7 +112,6 @@ public class BnkSeekDto {
     public Date getDt_izm() {
         return dt_izm.get();
     }
-
 
     public String getKsnp() {
         return ksnp.get();

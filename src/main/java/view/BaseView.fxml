@@ -12,7 +12,7 @@
          <children>
             <Pane prefHeight="47.0" prefWidth="600.0">
                <children>
-                  <Button layoutX="182.0" layoutY="14.0" mnemonicParsing="false" onAction="#overloadDataFromDbf" prefHeight="25.0" prefWidth="236.0" text="Загрузить данные из справочников" />
+                  <Button layoutX="182.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnOverloadDataFromDbf" prefHeight="25.0" prefWidth="236.0" text="Загрузить данные из справочников" />
                </children>
             </Pane>
             <TitledPane text="Фильтр">
@@ -115,9 +115,9 @@
                         </GridPane>
                         <HBox alignment="BOTTOM_RIGHT" layoutX="20.0" layoutY="333.0" prefHeight="44.0" prefWidth="407.0" spacing="8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="389.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Редактировать" />
-                              <Button mnemonicParsing="false" text="Добавить" />
-                              <Button mnemonicParsing="false" text="Удалить" />
+                              <Button mnemonicParsing="false" onAction="#btnEditBnkSeek" text="Редактировать" />
+                              <Button mnemonicParsing="false" onAction="#btnAddBnkSeek" text="Добавить" />
+                              <Button mnemonicParsing="false" onAction="#btnDeleteBnkSeek" text="Удалить" />
                            </children>
                         </HBox>
                      </children>

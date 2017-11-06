@@ -17,11 +17,11 @@ public class OdbcDirectoriesDao {
         this.jdbcTemplate = new JdbcTemplateOdbc();
     }
 
-    public List<BnkSeek> getBnkSeek() throws SQLException {
-        List<BnkSeek> bnkSeekList = new ArrayList<>();
 
+    public List<BnkSeek> getBnkSeek() throws SQLException {
         String sql = "SELECT * FROM BNKSEEK";
 
+        List<BnkSeek> bnkSeekList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
             String real = resultSet.getString("REAL");
@@ -51,10 +51,9 @@ public class OdbcDirectoriesDao {
 
     //    PZN
     public List<ParticipantSettlement> getParticipantSettlements() throws SQLException {
-        List<ParticipantSettlement> participantSettlementList = new ArrayList<>();
-
         String sql = "SELECT * FROM PZN";
 
+        List<ParticipantSettlement> participantSettlementList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
             String pzn = resultSet.getString("PZN");
@@ -69,10 +68,9 @@ public class OdbcDirectoriesDao {
 
     //    UER
     public List<ElectParticipant> getElectParticipants() throws SQLException {
-        List<ElectParticipant> electParticipantList = new ArrayList<>();
-
         String sql = "SELECT * FROM UER";
 
+        List<ElectParticipant> electParticipantList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
             String uer = resultSet.getString("UER");
@@ -86,10 +84,9 @@ public class OdbcDirectoriesDao {
 
     //    REG
     public List<Region> getRegions() throws SQLException {
-        List<Region> regionList = new ArrayList<>();
-
         String sql = "SELECT * FROM REG";
 
+        List<Region> regionList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
             String rgn = resultSet.getString("RGN");
@@ -103,10 +100,9 @@ public class OdbcDirectoriesDao {
 
     //    TNP
     public List<TypeLocality> getTypeLocality() throws SQLException {
-        List<TypeLocality> localityList = new ArrayList<>();
-
         String sql = "SELECT * FROM TNP";
 
+        List<TypeLocality> localityList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
         while (resultSet.next()) {
             String tnp = resultSet.getString("TNP");

@@ -27,8 +27,30 @@ public class BnkSeekDao {
         String sqlClean__Bnk_Seek = "DELETE FROM Bnk_Seek;";
         jdbcTemplate.executeUpdate(sqlClean__Bnk_Seek);
 
+        String sqlInsert__Bnk_Seek = "INSERT OR REPLACE INTO Bnk_Seek VALUES (:real, :pzn, :uer, :rgn, :ind, :tnp, :nnp, :adr, :rkc, :namep, " +
+                " :newnum, :telefon, :regn, :okpo, :dt_izm, :ksnp, :date_in, :date_ch);";
         for (BnkSeek bnkSeek : bnkSeekList) {
-            insert(bnkSeek);
+            PreparedParamsSetter pps = new PreparedParamsSetter();
+            pps.setValues("real", bnkSeek.getReal());
+            pps.setValues("pzn", bnkSeek.getPzn());
+            pps.setValues("uer", bnkSeek.getUer());
+            pps.setValues("rgn", bnkSeek.getRgn());
+            pps.setValues("ind", bnkSeek.getInd());
+            pps.setValues("tnp", bnkSeek.getTnp());
+            pps.setValues("nnp", bnkSeek.getNnp());
+            pps.setValues("adr", bnkSeek.getAdr());
+            pps.setValues("rkc", bnkSeek.getRkc());
+            pps.setValues("namep", bnkSeek.getNamep());
+            pps.setValues("newnum", bnkSeek.getNewnum());
+            pps.setValues("telefon", bnkSeek.getTelefon());
+            pps.setValues("regn", bnkSeek.getRegn());
+            pps.setValues("okpo", bnkSeek.getOkpo());
+            pps.setValues("dt_izm", DateUtil.format(bnkSeek.getDt_izm()));
+            pps.setValues("ksnp", bnkSeek.getKsnp());
+            pps.setValues("date_in", DateUtil.format(bnkSeek.getDate_in()));
+            pps.setValues("date_ch", DateUtil.format(bnkSeek.getDate_ch()));
+
+            jdbcTemplate.executeUpdate(sqlInsert__Bnk_Seek, pps);
         }
     }
 
@@ -43,7 +65,7 @@ public class BnkSeekDao {
                 "  Region.name AS rgn_name,\n" +
                 "  ind,\n" +
                 "  Bnk_Seek.tnp,\n" +
-                "  Type_Locality.tnp AS tnp_name,\n" +
+                "  Type_Locality.name AS tnp_name,\n" +
                 "  nnp,\n" +
                 "  adr,\n" +
                 "  rkc,\n" +
@@ -58,10 +80,10 @@ public class BnkSeekDao {
                 "  date_ch,  \n" +
                 "  imy\n" +
                 "from Bnk_Seek\n" +
-                "LEFT JOIN Participant_Settlement ON Bnk_Seek.pzn=Participant_Settlement.pzn\n" +
-                "LEFT JOIN Elect_Participant ON Bnk_Seek.uer=Elect_Participant.uer\n" +
-                "LEFT JOIN Region ON Bnk_Seek.rgn=Region.rgn\n" +
-                "LEFT JOIN Type_Locality ON Bnk_Seek.tnp=Type_Locality.tnp; ";
+                "INNER JOIN Participant_Settlement ON Bnk_Seek.pzn=Participant_Settlement.pzn\n" +
+                "INNER JOIN Elect_Participant ON Bnk_Seek.uer=Elect_Participant.uer\n" +
+                "INNER JOIN Region ON Bnk_Seek.rgn=Region.rgn\n" +
+                "INNER JOIN Type_Locality ON Bnk_Seek.tnp=Type_Locality.tnp; ";
 
         List<BnkSeekName> bnkSeekNameList = new ArrayList<>();
         ResultSet resultSet = jdbcTemplate.executeQuery(sql);
@@ -101,16 +123,22 @@ public class BnkSeekDao {
         return Collections.emptyList();
     }
 
-    public void insert(BnkSeek bnkSeek) {
-        String sqlInsert__Bnk_Seek = "INSERT OR REPLACE INTO Bnk_Seek VALUES (:real, :pzn, :uer, :rgn, :ind, :tnp, :nnp, :adr, :rkc, :namep, " +
-                " :newnum, :telefon, :regn, :okpo, :dt_izm, :ksnp, :date_in, :date_ch);";
+    public void insert(BnkSeekName bnkSeek) {
+        String sqlInsert = "INSERT OR REPLACE INTO Bnk_Seek VALUES " +
+                "(:real, " +
+                "(SELECT pzn FROM Participant_Settlement WHERE name=:pznName), " +
+                "(SELECT uer FROM Elect_Participant WHERE name=:uerName), " +
+                "(SELECT rgn FROM Region WHERE name=:rgnName), :ind, " +
+                "(SELECT tnp FROM Type_Locality WHERE name=:tnpName), :nnp, :adr, :rkc, :namep,  :newnum, :telefon, " +
+                ":regn, :okpo, :dt_izm, :ksnp, :date_in, :date_ch);";
+
         PreparedParamsSetter pps = new PreparedParamsSetter();
         pps.setValues("real", bnkSeek.getReal());
-        pps.setValues("pzn", bnkSeek.getPzn());
-        pps.setValues("uer", bnkSeek.getUer());
-        pps.setValues("rgn", bnkSeek.getRgn());
+        pps.setValues("pznName", bnkSeek.getPznName());
+        pps.setValues("uerName", bnkSeek.getUerName());
+        pps.setValues("rgnName", bnkSeek.getRgnName());
         pps.setValues("ind", bnkSeek.getInd());
-        pps.setValues("tnp", bnkSeek.getTnp());
+        pps.setValues("tnpName", bnkSeek.getTnpName());
         pps.setValues("nnp", bnkSeek.getNnp());
         pps.setValues("adr", bnkSeek.getAdr());
         pps.setValues("rkc", bnkSeek.getRkc());
@@ -124,7 +152,7 @@ public class BnkSeekDao {
         pps.setValues("date_in", DateUtil.format(bnkSeek.getDate_in()));
         pps.setValues("date_ch", DateUtil.format(bnkSeek.getDate_ch()));
 
-        jdbcTemplate.executeUpdate(sqlInsert__Bnk_Seek, pps);
+        jdbcTemplate.executeUpdate(sqlInsert, pps);
     }
 
     public void deleteById(String newnum) {

@@ -5,6 +5,10 @@ import main.java.bd.preparedParams.PreparedParamsSetter;
 import main.java.bd.register.JdbcTemplateSqlite;
 import main.java.model.TypeLocality;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TypeLocalityDao {
@@ -28,4 +32,24 @@ public class TypeLocalityDao {
         }
 
     }
+
+    public List<TypeLocality> getTypeLocalityList() {
+        String sql = "SELECT tnp, name FROM Type_Locality;";
+
+        List<TypeLocality> typeLocalityList = new ArrayList<>();
+        ResultSet resultSet = jdbcTemplate.executeQuery(sql);
+        try {
+            while (resultSet.next()) {
+                String tnp = resultSet.getString("tnp");
+                String name = resultSet.getString("name");
+
+                typeLocalityList.add(new TypeLocality(tnp, name));
+            }
+
+            return typeLocalityList;
+        } catch (SQLException e) {
+            return Collections.emptyList();
+        }
+    }
+
 }

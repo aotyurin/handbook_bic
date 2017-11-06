@@ -1,12 +1,12 @@
 package main.java.view;
 
-import com.sun.org.apache.xml.internal.security.Init;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialogs;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.java.dto.BnkSeekDto;
-import main.java.service.BnkSeekService;
+import main.java.dto.*;
+import main.java.service.*;
 import main.java.util.DateUtil;
 
 import java.text.ParseException;
@@ -15,7 +15,10 @@ import java.util.List;
 
 public class EditDialogController {
     private BnkSeekService bnkSeekService;
-
+    private RegionService regionService;
+    private ParticipantSettlementService participantSettlementService;
+    private ElectParticipantService electParticipantService;
+    private TypeLocalityService typeLocalityService;
 
     private Stage dialogStage;
     private BnkSeekDto bnkSeek;
@@ -27,15 +30,8 @@ public class EditDialogController {
     @FXML
     public TextField realField;
     @FXML
-    public TextField pznNameField;
-    @FXML
-    public TextField uerNameField;
-    @FXML
-    public TextField rgnNameField;
-    @FXML
     public TextField indField;
-    @FXML
-    public TextField tnpNameField;
+
     @FXML
     public TextField nnpField;
     @FXML
@@ -57,25 +53,35 @@ public class EditDialogController {
     @FXML
     public TextField date_chField;
 
+    @FXML
+    public ComboBox<String> pznNameComboBox;
+    @FXML
+    public ComboBox<String> uerNameComboBox;
+    @FXML
+    public ComboBox<String> rgnNameComboBox;
+    @FXML
+    public ComboBox<String> tnpNameComboBox;
+
 
     public EditDialogController() {
         this.bnkSeekService = new BnkSeekService();
+        this.regionService = new RegionService();
+        this.participantSettlementService = new ParticipantSettlementService();
+        this.electParticipantService = new ElectParticipantService();
+        this.typeLocalityService = new TypeLocalityService();
     }
-
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
 
-    public void setBnkSeek(BnkSeekDto bnkSeekDto) {
+    public void initCtrl(BnkSeekDto bnkSeekDto) {
         this.bnkSeek = bnkSeekDto;
+
         fillField(this.bnkSeek);
+        fillComboBox();
+        selectedComboBox(this.bnkSeek);
     }
-
-    public BnkSeekDto getBnkSeek() {
-        return this.bnkSeek;
-    }
-
 
     @FXML
     private void initialize() {
@@ -84,6 +90,13 @@ public class EditDialogController {
     @FXML
     private void btnOk() {
         if (isInputValid()) {
+            BnkSeekDto tmp = this.bnkSeek;
+            this.bnkSeek = new BnkSeekDto(tmp.getReal(),
+                    this.pznNameComboBox.getSelectionModel().getSelectedItem(), this.uerNameComboBox.getSelectionModel().getSelectedItem(),
+                    this.rgnNameComboBox.getSelectionModel().getSelectedItem(), tmp.getInd(), this.tnpNameComboBox.getSelectionModel().getSelectedItem(),
+                    tmp.getNnp(), tmp.getAdr(), tmp.getRkc(), tmp.namepProperty().get(), tmp.newnumProperty().get(), tmp.getTelefon(),
+                    tmp.getRegn(), tmp.getOkpo(), tmp.getDt_izm(), tmp.getKsnp(), tmp.getDate_in(), tmp.getDate_ch());
+
             dialogStage.close();
         }
     }
@@ -134,6 +147,19 @@ public class EditDialogController {
         } catch (ParseException ignore) {
             msg.append("В поле 'Дата контроля' значение не является датой. Формат: " + DateUtil.getFormat() + "! \n");
         }
+        if (this.pznNameComboBox.getSelectionModel().getSelectedItem() == null) {
+            msg.append("Значение из списка 'Тип участника расчетов' не выбрано! \n");
+        }
+        if (this.uerNameComboBox.getSelectionModel().getSelectedItem() == null) {
+            msg.append("Значение из списка 'Тип участника системы электронных расчетов' не выбрано! \n");
+        }
+        if (this.rgnNameComboBox.getSelectionModel().getSelectedItem() == null) {
+            msg.append("Значение из списка 'Регион' не выбрано! \n");
+        }
+        if (this.tnpNameComboBox.getSelectionModel().getSelectedItem() == null) {
+            msg.append("Значение из списка 'Тип населенного пункта' не выбрано! \n");
+        }
+
 
         if (msg.length() == 0) {
             return true;
@@ -149,11 +175,7 @@ public class EditDialogController {
             this.namepField.setText(bnkSeekDto.namepProperty().get());
             this.newnumField.setText(bnkSeekDto.newnumProperty().get());
             this.realField.setText(bnkSeekDto.getReal());
-            this.pznNameField.setText(bnkSeekDto.getPznName());
-            this.uerNameField.setText(bnkSeekDto.getUerName());
-            this.rgnNameField.setText(bnkSeekDto.getRgnName());
             this.indField.setText(bnkSeekDto.getInd());
-            this.tnpNameField.setText(bnkSeekDto.getTnpName());
             this.nnpField.setText(bnkSeekDto.getNnp());
             this.adrField.setText(bnkSeekDto.getAdr());
             this.rkcField.setText(bnkSeekDto.getRkc());
@@ -168,11 +190,7 @@ public class EditDialogController {
             this.namepField.setText("");
             this.newnumField.setText("");
             this.realField.setText("");
-            this.pznNameField.setText("");
-            this.uerNameField.setText("");
-            this.rgnNameField.setText("");
             this.indField.setText("");
-            this.tnpNameField.setText("");
             this.nnpField.setText("");
             this.adrField.setText("");
             this.rkcField.setText("");
@@ -184,6 +202,38 @@ public class EditDialogController {
             this.date_inField.setText("");
             this.date_chField.setText("");
         }
+    }
+
+    private void fillComboBox() {
+        List<ParticipantSettlementDto> participantSettlementList = participantSettlementService.getParticipantSettlementList();
+        for (ParticipantSettlementDto settlementDto : participantSettlementList) {
+            this.pznNameComboBox.getItems().add(settlementDto.getName());
+        }
+        List<ElectParticipantDto> electParticipantDtoList = electParticipantService.getElectParticipantList();
+        for (ElectParticipantDto participantDto : electParticipantDtoList) {
+            this.uerNameComboBox.getItems().add(participantDto.getName());
+        }
+        List<RegionDto> regionDtoList = regionService.getRegionList();
+        for (RegionDto regionDto : regionDtoList) {
+            this.rgnNameComboBox.getItems().add(regionDto.getName());
+        }
+        List<TypeLocalityDto> typeLocalityDtoList = typeLocalityService.getTypeLocalityList();
+        for (TypeLocalityDto localityDto : typeLocalityDtoList) {
+            this.tnpNameComboBox.getItems().add(localityDto.getName());
+        }
+    }
+
+    private void selectedComboBox(BnkSeekDto bnkSeek) {
+        if (bnkSeek != null) {
+            this.pznNameComboBox.getSelectionModel().select(bnkSeek.getPznName());
+            this.uerNameComboBox.getSelectionModel().select(bnkSeek.getUerName());
+            this.rgnNameComboBox.getSelectionModel().select(bnkSeek.getRgnName());
+            this.tnpNameComboBox.getSelectionModel().select(bnkSeek.getTnpName());
+        }
+    }
+
+    public BnkSeekDto getResult() {
+        return this.bnkSeek;
     }
 
 }

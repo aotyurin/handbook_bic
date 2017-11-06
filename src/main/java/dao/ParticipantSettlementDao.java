@@ -5,6 +5,10 @@ import main.java.bd.preparedParams.PreparedParamsSetter;
 import main.java.bd.register.JdbcTemplateSqlite;
 import main.java.model.ParticipantSettlement;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ParticipantSettlementDao {
@@ -28,4 +32,25 @@ public class ParticipantSettlementDao {
             jdbcTemplate.executeUpdate(sqlInsert__Participant_Settlement, pps);
         }
     }
+
+    public List<ParticipantSettlement> getParticipantSettlementList() {
+        String sql = "SELECT pzn, imy, name FROM Participant_Settlement;";
+
+        List<ParticipantSettlement> settlementList = new ArrayList<>();
+        ResultSet resultSet = jdbcTemplate.executeQuery(sql);
+        try {
+            while (resultSet.next()) {
+                String rgn = resultSet.getString("pzn");
+                String imy = resultSet.getString("imy");
+                String name = resultSet.getString("name");
+
+                settlementList.add(new ParticipantSettlement(rgn, imy, name));
+            }
+
+            return settlementList;
+        } catch (SQLException e) {
+            return Collections.emptyList();
+        }
+    }
+
 }

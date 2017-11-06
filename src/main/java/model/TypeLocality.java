@@ -5,7 +5,6 @@ public class TypeLocality {
     private String name;
 
     public TypeLocality(String rgn, String name) {
-
         this.rgn = rgn;
         this.name = name;
     }

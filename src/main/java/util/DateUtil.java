@@ -22,4 +22,8 @@ public class DateUtil {
         return new SimpleDateFormat(DATE_FORMAT).parse(source);
     }
 
+    public static String getFormat() {
+        return DATE_FORMAT;
+    }
+
 }

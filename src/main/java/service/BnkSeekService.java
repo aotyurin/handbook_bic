@@ -2,6 +2,7 @@ package main.java.service;
 
 import main.java.dao.BnkSeekDao;
 import main.java.dto.BnkSeekDto;
+import main.java.model.BnkSeek;
 import main.java.model.BnkSeekName;
 
 import java.util.ArrayList;
@@ -31,5 +32,12 @@ public class BnkSeekService {
 
     public void deleteById(String newnum) {
         bnkSeekDao.deleteById(newnum);
+    }
+
+    public void edit(BnkSeekDto bnkSeekDto) {
+        bnkSeekDao.insert(new BnkSeek(bnkSeekDto.getReal(), bnkSeekDto.getPznName(), bnkSeekDto.getUerName(), bnkSeekDto.getRgnName(),
+                bnkSeekDto.getInd(), bnkSeekDto.getTnpName(), bnkSeekDto.getNnp(), bnkSeekDto.getAdr(), bnkSeekDto.getRkc(),
+                bnkSeekDto.namepProperty().get(), bnkSeekDto.newnumProperty().get(), bnkSeekDto.getTelefon(), bnkSeekDto.getRegn(), bnkSeekDto.getOkpo(),
+                bnkSeekDto.getDt_izm(), bnkSeekDto.getKsnp(), bnkSeekDto.getDate_in(), bnkSeekDto.getDate_ch()));
     }
 }
